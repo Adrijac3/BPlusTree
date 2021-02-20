@@ -9,6 +9,7 @@ class bPlusTree:
         while not isinstance(node, leafNode):
             node = self.findNode(node, key)
         return node
+        
     ### function to check if the node is full
     def checkOverflow(self, node):
         if len(node.keys) == node.order:
@@ -21,10 +22,7 @@ class bPlusTree:
         parent.children.pop(pos)
         #set correct parent of children of temp
         for c in temp.children:
-            if isinstance(c, nonLeafNode):
-                c.parent = parent
-            else:
-                continue
+            c.parent = parent
         i=0
         for k in parent.keys:
             if temp.keys[0] < k:
@@ -42,17 +40,13 @@ class bPlusTree:
         if key in self.count.keys():
             self.count[key]+=1
             return
-        # print("key to insert in bptree is: ",key)
         node = self.getCorrectLeaf(self.root, key)
         node.add(key)
         self.count[key]=1
         while self.checkOverflow(node) == True:
-            print(node.keys)
             if node.parent == None:
                 node = node.split()
                 self.root = node
-                print("root at present= ",self.root.keys)
-                print("parent of root= ", self.root.parent)
             else:
                 parent = node.parent
                 node = node.split()
@@ -62,48 +56,53 @@ class bPlusTree:
 
 
     def range(self,start,end):
-        # print("range to search in bptree is: ",start,end)
         node = self.getCorrectLeaf(self.root,start)
-        pos = node.findKey(start)
-        if pos == -1:
-            print("Invalid start key")
-            return
+        pos = 0
         countRange=0
-        print("pos= ",pos)
         while node!=None:
-            while pos<len(node.keys) and node.keys[pos]<=end:
-                if node.keys[pos] == end:
+            while pos<len(node.keys):
+                if node.keys[pos] >= start and node.keys[pos]<=end:
                     countRange+=self.count[node.keys[pos]]
-                    print(countRange)
-                    return
-                countRange+=self.count[node.keys[pos]]
                 pos+=1
             node = node.nextLeaf
             pos = 0
-        print("Invalid end key")
+        self.storeResult(str(countRange))
+        print(str(countRange))
         
             
     
     def search(self,key):
-        # print("search key: ",key)
         node = self.getCorrectLeaf(self.root,key)
-        print("node fetched to search: ",node.keys)
         if node.findKey(key) != -1:
-            print("Present\n")
+            print("YES")
+            self.storeResult("YES")
         else:
-            print("Absent\n")
+            print("NO")
+            self.storeResult("NO")
 
     def countKey(self,key):
         if key in self.count.keys():
-            print("Count of key: ",key, "=", self.count[key])
+            print(self.count[key])
+            self.storeResult(str(self.count[key]))
         else:
-            print("Key not present in this tree")
+            print("0")
+            self.storeResult("0")
 
     #helpers
     def printTree(self,node):
         print(node.keys)
         for c in node.children:
             self.printTree(c)
+
+    def storeResult(self,msg):
+        f2.write(msg+"\n")
+
+    def openFile(self):
+        global f2
+        f2 = open("output1.txt", 'w+')
+
+    def closeFile(self):
+        f2.close()
 
     @staticmethod
     def findNode(node, key):
