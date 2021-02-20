@@ -27,7 +27,7 @@ The implementation has been done using OOPS concepts and below attached is the c
 * The result of FIND, COUNT and RANGE will be displayed in terminal as well as stored in an output file named as `output1.txt`
 
 ### Deliverables-
-* Driver code in `driver.py`
+* Driver code in `drive.py`
 * B+ Tree class handling insert, count, find and range in `bPlusTree.py`
 * Two classes nonLeafNode and LeafNode in `node.py`
 #### Language used-
